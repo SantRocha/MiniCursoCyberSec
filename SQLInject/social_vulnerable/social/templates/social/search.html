@@ -1,0 +1,64 @@
+{% extends "social/base.html" %}
+
+{% block title %}Buscar Usuários - Social Vulnerable{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <div class="container" style="margin-bottom: 2rem;">
+        <h2 style="color: #333; margin-bottom: 1.5rem;">🔍 Buscar Usuários</h2>
+        
+        <form method="GET" style="display: flex; gap: 1rem; flex-direction: row;">
+            <input type="search" name="q" placeholder="Buscar por usuário ou email..." value="{{ query }}" style="flex: 1;">
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% if query %}
+        {% if results %}
+        <div class="container">
+            <h3 style="color: #333; margin-bottom: 1.5rem;">Resultados para "{{ query }}" ({{ results|length }})</h3>
+            
+            <div class="search-results">
+                {% for result in results %}
+                <div class="user-card">
+                    <h3>{{ result.1 }}</h3>
+                    <p style="color: #999;">{{ result.2 }}</p>
+                    
+                    {% if result.3 %}
+                    <div class="user-card-bio">
+                        {{ result.3 }}
+                    </div>
+                    {% endif %}
+                    
+                    <div style="display: flex; gap: 0.5rem;">
+                        {% if result.4 %}
+                            <a href="{% url 'unfollow_user' result.0 %}" class="unfollow-btn">Deixar de Seguir</a>
+                        {% else %}
+                            <a href="{% url 'follow_user' result.0 %}" class="follow-btn">Seguir</a>
+                        {% endif %}
+                        <a href="{% url 'profile' result.1 %}" style="flex: 1; padding: 0.5rem 1rem; background: #f0f0f0; color: #333; border: none; border-radius: 5px; text-decoration: none; text-align: center; font-weight: 600;">Ver Perfil</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="container" style="text-align: center; padding: 3rem;">
+            <p style="color: #999; font-size: 1.1rem;">Nenhum usuário encontrado para "{{ query }}".</p>
+        </div>
+        {% endif %}
+    {% else %}
+    <div class="container" style="text-align: center; padding: 3rem;">
+        <p style="color: #999; font-size: 1.1rem;">Digite um termo de busca para encontrar usuários.</p>
+    </div>
+    {% endif %}
+
+    <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.9); border-radius: 5px; font-size: 0.85rem; color: #666;">
+        <strong>Dica de Segurança:</strong> Tente usar SQL Injection na busca! Por exemplo: <code>%' OR '1'='1</code> ou <code>%' UNION SELECT ...</code>
+    </div>
+</div>
+{% endblock %}

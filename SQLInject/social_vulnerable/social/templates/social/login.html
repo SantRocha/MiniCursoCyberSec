@@ -1,0 +1,38 @@
+{% extends "social/base.html" %}
+
+{% block title %}Login - Social Vulnerable{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 400px; margin: 5rem auto;">
+    <h1 style="text-align: center; color: #333; margin-bottom: 2rem;">Entrar</h1>
+    
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="username">Usuário</label>
+            <input type="text" id="username" name="username" required placeholder="Digite seu usuário">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" required placeholder="Digite sua senha">
+        </div>
+
+        <button type="submit">Entrar</button>
+    </form>
+
+    <div class="auth-links">
+        Não tem conta? <a href="{% url 'register' %}">Cadastre-se aqui</a>
+    </div>
+
+    <div style="margin-top: 2rem; padding: 1rem; background: #f0f0f0; border-radius: 5px; font-size: 0.85rem; color: #666;">
+        <strong>Nota de Segurança:</strong> Este site é vulnerável a SQL Injection para fins educacionais. 
+        Teste as vulnerabilidades responsavelmente.
+    </div>
+</div>
+{% endblock %}

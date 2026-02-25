@@ -1,0 +1,75 @@
+{% extends "social/base.html" %}
+
+{% block title %}{{ user.username }} - Social Vulnerable{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% else %}
+        <div class="container" style="margin-bottom: 2rem;">
+            <div class="profile-header">
+                <div class="profile-info">
+                    <h1>{{ user.username }}</h1>
+                    <p>{{ user.email }}</p>
+                    {% if user.bio %}
+                    <div class="profile-bio">{{ user.bio }}</div>
+                    {% endif %}
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <div class="stat-number">{{ following_count }}</div>
+                            <div class="stat-label">Seguindo</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">{{ follower_count }}</div>
+                            <div class="stat-label">Seguidores</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">{{ posts|length }}</div>
+                            <div class="stat-label">Postagens</div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if not is_own_profile %}
+                <div>
+                    {% if is_following %}
+                        <a href="{% url 'unfollow_user' user.id %}" class="unfollow-btn">Deixar de Seguir</a>
+                    {% else %}
+                        <a href="{% url 'follow_user' user.id %}" class="follow-btn">Seguir</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if posts %}
+        <div class="container">
+            <div class="posts-section">
+                <h2>Postagens</h2>
+                
+                {% for post in posts %}
+                <div class="post">
+                    <div class="post-header">
+                        <span class="post-author">{{ user.username }}</span>
+                        <span class="post-date">{{ post.2|date:"d/m/Y H:i" }}</span>
+                    </div>
+                    <div class="post-content">
+                        {{ post.1 }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="container" style="text-align: center; padding: 3rem;">
+            <p style="color: #999; font-size: 1.1rem;">{{ user.username }} ainda não fez nenhuma postagem.</p>
+        </div>
+        {% endif %}
+    {% endif %}
+
+    <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.9); border-radius: 5px; font-size: 0.85rem; color: #666;">
+        <strong>Dica de Segurança:</strong> Tente usar SQL Injection na URL do perfil! Por exemplo: <code>/profile/admin' OR '1'='1/</code>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "social/base.html" %}
+
+{% block title %}Feed - Social Vulnerable{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="container" style="margin-bottom: 2rem;">
+        <h2 style="color: #333; margin-bottom: 1rem;">📝 Criar Postagem</h2>
+        
+        <form method="POST" action="{% url 'create_post' %}">
+            {% csrf_token %}
+            <textarea name="content" placeholder="No que você está pensando?" required></textarea>
+            <button type="submit">Postar</button>
+        </form>
+    </div>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% if posts %}
+        <div class="container">
+            <h2 style="color: #333; margin-bottom: 1.5rem;">📰 Feed</h2>
+            
+            {% for post in posts %}
+                <div class="post {% if post.5 == 1 %}followed{% endif %}">
+                    <button onclick="deletarPost({{ post.0 }})">Deletar</button>
+                    
+                    {% if post.5 == 1 %}
+                    <div style="background: #667eea; color: white; padding: 0.25rem 0.75rem; border-radius: 3px; font-size: 0.75rem; display: inline-block; margin-bottom: 0.5rem;">
+                        ⭐ De quem você segue
+                    </div>
+                    {% endif %}
+                    
+                    {% if post.5 == 2 %}
+                    <div style="background: #28a745; color: white; padding: 0.25rem 0.75rem; border-radius: 3px; font-size: 0.75rem; display: inline-block; margin-bottom: 0.5rem;">
+                        👤 Sua postagem
+                    </div>
+                    {% endif %}
+
+                    <div class="post-header">
+                        <a href="{% url 'profile' post.3 %}" class="post-author">{{ post.3 }}</a>
+                        <span class="post-date">{{ post.2|date:"d/m/Y H:i" }}</span>
+                    </div>
+                    
+                    <div class="post-content">
+                        {{ post.1 }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+    <div class="container" style="text-align: center; padding: 3rem;">
+        <p style="color: #999; font-size: 1.1rem;">Nenhuma postagem ainda. Siga alguns usuários para começar!</p>
+        <a href="{% url 'search_users' %}" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: #667eea; color: white; text-decoration: none; border-radius: 5px; font-weight: 600;">Buscar Usuários</a>
+    </div>
+    {% endif %}
+
+    <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.9); border-radius: 5px; font-size: 0.85rem; color: #666;">
+        <strong>Dica:</strong> Postagens de usuários que você segue aparecem destacadas no topo!
+    </div>
+</div>
+
+<script>
+function deletarPost(postId) {
+    fetch(`/delete_post/${postId}/`)
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        if (data.success) {
+            location.reload();
+        }
+    });
+}
+</script>
+{% endblock %}

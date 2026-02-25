@@ -1,0 +1,48 @@
+{% extends "social/base.html" %}
+
+{% block title %}Cadastro - Social Vulnerable{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 400px; margin: 3rem auto;">
+    <h1 style="text-align: center; color: #333; margin-bottom: 2rem;">Criar Conta</h1>
+    
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="username">Usuário</label>
+            <input type="text" id="username" name="username" required placeholder="Escolha um usuário único">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="Digite seu email">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" required placeholder="Digite uma senha">
+        </div>
+
+        <div class="form-group">
+            <label for="bio">Bio (opcional)</label>
+            <textarea id="bio" name="bio" placeholder="Conte um pouco sobre você..."></textarea>
+        </div>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <div class="auth-links">
+        Já tem conta? <a href="{% url 'login' %}">Faça login aqui</a>
+    </div>
+
+    <div style="margin-top: 2rem; padding: 1rem; background: #f0f0f0; border-radius: 5px; font-size: 0.85rem; color: #666;">
+        <strong>Nota de Segurança:</strong> Este site é vulnerável a SQL Injection para fins educacionais. 
+        Teste as vulnerabilidades responsavelmente.
+    </div>
+</div>
+{% endblock %}
