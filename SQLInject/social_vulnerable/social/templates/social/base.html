@@ -382,6 +382,67 @@
             .search-results {
                 grid-template-columns: 1fr;
             }
+
+            .post-card {
+                background: #ffffff;
+                border: 1px solid #eaeaea;
+                border-radius: 10px;
+                padding: 16px;
+                margin-bottom: 16px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+                font-family: system-ui, -apple-system, sans-serif;
+            }
+            .post-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 12px;
+                padding-bottom: 8px;
+                border-bottom: 1px solid #f5f5f5;
+            }
+            .post-meta {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            .post-author {
+                font-weight: 600;
+                color: #2b6cb0;
+                text-decoration: none;
+            }
+            .post-author:hover { text-decoration: underline; }
+            .post-date {
+                color: #718096;
+                font-size: 0.85rem;
+            }
+            .badge {
+                padding: 4px 8px;
+                border-radius: 6px;
+                font-size: 0.75rem;
+                font-weight: 500;
+            }
+            .badge-star { background: #ebf4ff; color: #4c51bf; }
+            .badge-user { background: #f0fff4; color: #2f855a; }
+            .post-content {
+                color: #2d3748;
+                line-height: 1.6;
+                font-size: 0.95rem;
+            }
+            .btn-delete {
+                background: transparent;
+                color: #e53e3e;
+                border: 1px solid #fc8181;
+                border-radius: 6px;
+                padding: 4px 10px;
+                font-size: 0.8rem;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+            .btn-delete:hover {
+                background: #e53e3e;
+                color: white;
+            }
         }
     </style>
     {% block extra_css %}{% endblock %}

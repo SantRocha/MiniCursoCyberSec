@@ -76,7 +76,10 @@ def feed(request):
     
     user_id = request.session.get('user_id')
     
-    # Buscar IDs dos usuários que o usuário segue
+    # 1. Verifica se quem está logado é o admin (baseado na sessão)
+    username = request.session.get('username', '')
+    is_admin = (username == 'admin') 
+    
     following_query = f"""
         SELECT following_id FROM follows WHERE follower_id = {user_id}
     """
@@ -121,23 +124,31 @@ def feed(request):
             cursor.execute(my_posts_query)
             my_posts = cursor.fetchall()
             
-            cursor.execute(followed_posts_query)
-            followed_posts = cursor.fetchall()
+            # Previne erro caso a lista de seguidos esteja vazia
+            if following_ids:
+                cursor.execute(followed_posts_query)
+                followed_posts = cursor.fetchall()
+            else:
+                followed_posts = []
             
             cursor.execute(other_posts_query)
             other_posts = cursor.fetchall()
         
         posts = list(followed_posts) + list(other_posts) + list(my_posts)
         
+        # 2. Agora sim, com tudo pronto, montamos UM ÚNICO contexto!
         context = {
             'posts': posts,
-            'username': request.session.get('username'),
-            'user_id': user_id
+            'username': username,
+            'user_id': user_id,
+            'is_admin': is_admin  # <--- Variável enviada para o HTML aqui
         }
+        
+        # 3. Renderiza passando apenas o 'context'
         return render(request, 'social/feed.html', context)
+        
     except Exception as e:
         return render(request, 'social/feed.html', {'error': str(e)})
-
 def search_users(request):
     """Busca de usuários com SQL Injection vulnerável"""
     if 'user_id' not in request.session:

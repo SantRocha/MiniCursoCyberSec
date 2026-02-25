@@ -23,30 +23,30 @@
             <h2 style="color: #333; margin-bottom: 1.5rem;">📰 Feed</h2>
             
             {% for post in posts %}
-                <div class="post {% if post.5 == 1 %}followed{% endif %}">
-                    <button onclick="deletarPost({{ post.0 }})">Deletar</button>
-                    
-                    {% if post.5 == 1 %}
-                    <div style="background: #667eea; color: white; padding: 0.25rem 0.75rem; border-radius: 3px; font-size: 0.75rem; display: inline-block; margin-bottom: 0.5rem;">
-                        ⭐ De quem você segue
-                    </div>
-                    {% endif %}
-                    
-                    {% if post.5 == 2 %}
-                    <div style="background: #28a745; color: white; padding: 0.25rem 0.75rem; border-radius: 3px; font-size: 0.75rem; display: inline-block; margin-bottom: 0.5rem;">
-                        👤 Sua postagem
-                    </div>
-                    {% endif %}
-
-                    <div class="post-header">
-                        <a href="{% url 'profile' post.3 %}" class="post-author">{{ post.3 }}</a>
+            <div class="post-card {% if post.5 == 1 %}followed{% endif %}">
+                <div class="post-header">
+                    <div class="post-meta">
+                        <a href="{% url 'profile' post.3 %}" class="post-author">@{{ post.3 }}</a>
                         <span class="post-date">{{ post.2|date:"d/m/Y H:i" }}</span>
+                        
+                        {% if post.5 == 1 %}
+                            <span class="badge badge-star">⭐ Seguindo</span>
+                        {% endif %}
+                        
+                        {% if post.5 == 2 %}
+                            <span class="badge badge-user">👤 Sua postagem</span>
+                        {% endif %}
                     </div>
                     
-                    <div class="post-content">
-                        {{ post.1 }}
-                    </div>
+                    {% if is_admin or post.5 == 2 %}
+                        <button class="btn-delete" onclick="deletarPost({{ post.0 }})">Deletar</button>
+                    {% endif %}
                 </div>
+                
+                <div class="post-content">
+                    {{ post.1 }}
+                </div>
+            </div>
             {% endfor %}
         </div>
     {% else %}
