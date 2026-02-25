@@ -18,11 +18,12 @@ def register(request):
         email = request.POST.get('email', '')
         password = request.POST.get('password', '')
         bio = request.POST.get('bio', '')
+        role = 'user'
 
         # VULNERÁVEL A SQL INJECTION
         query = f"""
-            INSERT INTO users (username, email, password, bio, created_at, updated_at)
-            VALUES ('{username}', '{email}', '{password}', '{bio}',  CURRENT_TIMESTAMP,  CURRENT_TIMESTAMP)
+            INSERT INTO users (username, email, password, bio, role, created_at, updated_at)
+            VALUES ('{username}', '{email}', '{password}', '{bio}', '{role}',  CURRENT_TIMESTAMP,  CURRENT_TIMESTAMP)
         """
         
         try:
